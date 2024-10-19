@@ -1,15 +1,12 @@
 package com.serverpet.server.Security;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.serverpet.server.Models.UserEntity;
-import com.serverpet.server.Repositories.UserRepository;
 import com.serverpet.server.Util.JwtServicie;
 import io.micrometer.common.lang.NonNull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

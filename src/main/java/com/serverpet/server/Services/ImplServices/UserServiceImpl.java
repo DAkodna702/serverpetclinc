@@ -6,11 +6,12 @@ import com.serverpet.server.DTO.AuthResponse;
 import com.serverpet.server.Repositories.UserRepository;
 import com.serverpet.server.Util.JwtServicie;
 import com.serverpet.server.Util.Roles;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,12 +23,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.serverpet.server.Models.UserEntity;
 
-import javax.management.relation.Role;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserServiceImpl implements UserDetailsService {
     @Autowired
     private JwtServicie jwtUtils;
