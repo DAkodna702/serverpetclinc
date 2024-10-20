@@ -2,20 +2,42 @@ package com.serverpet.server.Services;
 
 import java.util.List;
 
+import com.serverpet.server.Repositories.HistoriRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.serverpet.server.Models.HistoriEntity;
 
-public interface HistoriService {
 
-     void save(HistoriEntity historiEntity);
+@Service
+public class HistoriService {
 
-    void update(HistoriEntity historiEntity);
+    @Autowired
+    private HistoriRepository historiRepository;
 
-    List<HistoriEntity> findByMascotIdAndPendingState(Long id);
+    // Método para obtener historias por mascota y estado pendiente
+    public List<HistoriEntity> findByMascotIdAndPendingState(Long mascotId) {
+        return historiRepository.findByMascotIdAndPendingState(mascotId);
+    }
 
-    List<HistoriEntity> findByMascotIdOrderByState(Long id);
+    // Método para obtener historias por mascota ordenadas por estado
+    public List<HistoriEntity> findByMascotIdOrderByState(Long mascotId) {
+        return historiRepository.findByMascotIdOrderByState(mascotId);
+    }
 
-    List<HistoriEntity> findByEmpleadoIdAndPendingState(Long id);
+    // Método para obtener historias por trabajador y estado pendiente
+    public List<HistoriEntity> findByWorkerIdAndPendingState(Long workerId) {
+        return historiRepository.findByWorkerIdAndPendingState(workerId);
+    }
 
-    List<HistoriEntity> findByEmpleadoIdOrderByState(Long id);
+    // Método para obtener historias por trabajador ordenadas por estado
+    public List<HistoriEntity> findByWorkerIdOrderByState(Long workerId) {
+        return historiRepository.findByWorkerIdOrderByState(workerId);
+    }
+
+    // Método para crear una nueva historia clínica
+    public HistoriEntity createHistori(HistoriEntity historiEntity) {
+        return historiRepository.save(historiEntity);
+    }
 
 }

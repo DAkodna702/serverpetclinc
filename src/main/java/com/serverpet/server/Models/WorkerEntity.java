@@ -45,8 +45,6 @@ public class WorkerEntity implements UserDetails {
 
     @Column(unique = true)
     private String username;
-
-    private String nombre;
     private String password;
     private String email;
     private Integer phone;
@@ -65,6 +63,15 @@ public class WorkerEntity implements UserDetails {
 
     @Column(name = "credential_No_Expired")
     private boolean credentialNoExpired;
+
+
+     public Roles getRole() {
+        return roles;
+    }
+
+    public void setRole(Roles roles) {
+        this.roles = roles;
+    }
 
      @Override
      public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -9,7 +9,7 @@ import com.serverpet.server.Repositories.FacturaRepository;
 
 
 @Service
-public class FacturaServiciesImpl {
+public class FacturaServicies {
 
     @Autowired
     private FacturaRepository facturaRepository;

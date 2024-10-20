@@ -45,7 +45,6 @@ public class UserEntity implements UserDetails {
 
     private String password;
     private String email;
-    private String name;
     private Integer phone;
 
     @Enumerated(EnumType.STRING)

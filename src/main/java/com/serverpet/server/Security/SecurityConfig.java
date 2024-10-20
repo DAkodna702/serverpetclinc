@@ -1,7 +1,7 @@
 package com.serverpet.server.Security;
 
 
-import com.serverpet.server.Services.ImplServices.UserServiceImpl;
+import com.serverpet.server.Services.UserServiceImpl;
 import com.serverpet.server.Util.JwtServicie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -43,14 +43,15 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(http -> {
                     // EndPoints publicos
-                    http.requestMatchers(HttpMethod.POST, "/api/**").permitAll();
-                    http.requestMatchers(HttpMethod.POST, "/api/log-in").permitAll();
+                    http.requestMatchers(HttpMethod.POST, "/auth/user/log-in").permitAll();
+                    http.requestMatchers(HttpMethod.POST, "/auth/user/sign-up").permitAll();
+                    http.requestMatchers(HttpMethod.POST, "/auth2/worker/log-in").permitAll();
+                    http.requestMatchers(HttpMethod.POST, "/auth2/worker/sign-up").permitAll();
 
-                    // EndPoints Privados
-                    http.requestMatchers(HttpMethod.GET, "/method/get").hasAuthority("READ");
-                    http.requestMatchers(HttpMethod.POST, "/method/post").hasAuthority("CREATE");
-                    http.requestMatchers(HttpMethod.DELETE, "/method/delete").hasAuthority("DELETE");
-                    http.requestMatchers(HttpMethod.PUT, "/method/put").hasAuthority("UPDATE");
+                    // EndPoints UserPrivados
+                    http.requestMatchers(HttpMethod.PUT, "/auth/user/updateuser").hasAnyRole("Administrador","Custumer");
+                    http.requestMatchers(HttpMethod.DELETE, "/auth/user/deleteuser/**").hasAnyRole("Administrador","Custumer");
+                    http.requestMatchers(HttpMethod.GET, "/auth/user/all").hasAnyRole("Administrador");
 
                     http.anyRequest().denyAll();
                 })
