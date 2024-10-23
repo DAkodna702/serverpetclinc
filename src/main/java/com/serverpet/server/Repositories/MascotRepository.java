@@ -21,9 +21,9 @@ public interface MascotRepository extends JpaRepository<MascotEntity, Long> {
     @Query("SELECT m FROM MascotEntity m WHERE m.isDeleted = false")
     List<MascotEntity> findAllMascots();
 
-    // Buscar todas las mascotas de un usuario específico
-    @Query("SELECT m FROM MascotEntity m WHERE m.userentidad = :user AND m.isDeleted = false")
-    List<MascotEntity> findAllByUser(@Param("user") UserEntity user);
+    // Obtener mascotas por nombre de usuario
+    @Query("SELECT m FROM MascotEntity m WHERE m.userentidad.username = :username AND m.isDeleted = false")
+    List<MascotEntity> findAllByUserUsername(@Param("username") String username);
 
     // Buscar mascotas por nombre exacto
     @Query("SELECT m FROM MascotEntity m WHERE m.name = :name AND m.isDeleted = false")

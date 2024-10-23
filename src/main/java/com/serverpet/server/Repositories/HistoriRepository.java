@@ -22,8 +22,7 @@ public interface HistoriRepository extends JpaRepository<HistoriEntity, Long> {
      List<HistoriEntity> findByMascotIdOrderByState(@Param("mascotId") Long mascotId);
 
 
-    /* for workers and state */
-    /* for workers and state */
+
     @Query("SELECT h FROM HistoriEntity h WHERE h.workerEntity.id = :workerId AND h.historistate = 'PENDIENTE'")
     List<HistoriEntity> findByWorkerIdAndPendingState(@Param("workerId") Long workerId);
 
@@ -32,5 +31,6 @@ public interface HistoriRepository extends JpaRepository<HistoriEntity, Long> {
             "WHEN h.historistate = 'POSPUESTO' THEN 2 " +
             "WHEN h.historistate = 'CANCELADO' THEN 3 ELSE 4 END")
     List<HistoriEntity> findByWorkerIdOrderByState(@Param("workerId") Long workerId);
+
 
 }

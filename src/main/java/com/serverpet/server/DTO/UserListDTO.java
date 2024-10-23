@@ -7,7 +7,7 @@ public class UserListDTO {
     private String email;
     private Integer phone;
 
-    // Constructor
+
     public UserListDTO(Long id, String username, String email, Integer phone) {
         this.id = id;
         this.username = username;

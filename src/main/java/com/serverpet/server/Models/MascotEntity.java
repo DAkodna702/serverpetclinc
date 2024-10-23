@@ -36,6 +36,7 @@ public class MascotEntity {
     private  Integer years_old;
     private String race;
     private String sex;
+
     @Builder.Default
     private boolean isDeleted = false;
 

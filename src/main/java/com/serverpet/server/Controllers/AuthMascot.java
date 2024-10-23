@@ -1,10 +1,14 @@
 package com.serverpet.server.Controllers;
 
 
+import com.serverpet.server.DTO.MascotDTO;
+import com.serverpet.server.DTO.MascotDTORequest;
+import com.serverpet.server.DTO.MascotDTORseponse;
 import com.serverpet.server.Models.MascotEntity;
 import com.serverpet.server.Models.UserEntity;
 import com.serverpet.server.Repositories.UserRepository;
 import com.serverpet.server.Services.MascotService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/mascot")
 @CrossOrigin("http://localhost:3000")
+@RequestMapping("/mascot")
 public class AuthMascot {
 
     @Autowired
@@ -24,39 +28,36 @@ public class AuthMascot {
     @Autowired
     private UserRepository userRepository;
 
-    // Obtener todas las mascotas de un usuario
-    @GetMapping("/user/{username}")
-    public ResponseEntity<List<MascotEntity>> getMascotsByUser(@PathVariable String username) {
-        // Aquí deberías obtener la entidad del usuario por su nombre de usuario
-        UserEntity user = userRepository.findUserEntityByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con nombre: " + username));
 
-        List<MascotEntity> mascots = mascotService.getMascotsByUser(user);
-        return ResponseEntity.ok(mascots);
+    @GetMapping("/user/{username}")
+    public ResponseEntity<List<MascotDTORseponse>> getMascotsByUser(@PathVariable String username) {
+        // Obtenemos las mascotas y devolvemos la lista de DTOs
+        List<MascotDTORseponse> mascots = mascotService.getMascotsByUser(username);
+        return new ResponseEntity<>(mascots, HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<MascotEntity> createMascot(@RequestBody MascotEntity mascot) {
-        MascotEntity savedMascot = mascotService.saveOrUpdateMascot(mascot);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedMascot);
+    public ResponseEntity<MascotEntity> createMascot(@RequestBody @Valid MascotDTO mascotDTO) {
+        MascotEntity savedMascot = mascotService.createMascot(mascotDTO, userRepository);
+        return new ResponseEntity<>(savedMascot, HttpStatus.CREATED);
     }
+
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<MascotEntity> updateMascot(@PathVariable Long id, @RequestBody MascotEntity mascotDetails) {
-        // Buscar la mascota existente y lanzar excepción si no se encuentra
-        MascotEntity existingMascot = mascotService.getMascotById(id);
-
-        // Actualizar los datos de la mascota
-        existingMascot.setName(mascotDetails.getName());
-        existingMascot.setYears_old(mascotDetails.getYears_old());
-        existingMascot.setRace(mascotDetails.getRace());
-        existingMascot.setSex(mascotDetails.getSex());
-
-        // Guardar la mascota actualizada
-        MascotEntity updatedMascot = mascotService.saveOrUpdateMascot(existingMascot);
-        return ResponseEntity.ok(updatedMascot);
+    public ResponseEntity<MascotDTO> updateMascot(@PathVariable Long id, @RequestBody @Valid MascotDTORequest mascotDTORequest) {
+        MascotEntity updatedMascot = mascotService.updateMascot(id, mascotDTORequest);
+        MascotDTO response = new MascotDTO(
+                updatedMascot.getName(),
+                updatedMascot.getYears_old(),
+                updatedMascot.getRace(),
+                updatedMascot.getSex(),
+                updatedMascot.isDeleted(),
+                updatedMascot.getUserentidad().getId()
+        );
+        return ResponseEntity.ok(response);
     }
 
+    //++++++++++++++++++++++++++++++++++++++++++
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteMascot(@PathVariable Long id) {
         // Verificar si la mascota existe antes de eliminar
@@ -67,9 +68,10 @@ public class AuthMascot {
         return ResponseEntity.noContent().build(); // 204 No Content
     }
 
+    //+++++++++++++++++++++++++++++++++++++++++++++
     @GetMapping("/listmascot")
-    public ResponseEntity<List<MascotEntity>> getAllActiveMascots() {
-        List<MascotEntity> activeMascots = mascotService.getAllMascots();
+    public ResponseEntity<List<MascotDTORseponse>> getAllActiveMascots() {
+        List<MascotDTORseponse> activeMascots = mascotService.getAllMascots();
         return ResponseEntity.ok(activeMascots);
     }
 

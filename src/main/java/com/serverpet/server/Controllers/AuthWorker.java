@@ -13,7 +13,9 @@ import com.serverpet.server.Services.WorkerService;
 
 import jakarta.validation.Valid;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -40,10 +42,12 @@ public class AuthWorker {
     }
 
     @DeleteMapping("/deleteuser/{username}")
-    public ResponseEntity<String>deleteuser(@PathVariable String username){
-        String mensajedeRespuesta= workerService.deleteworkerbyUsername(username);
-        return new ResponseEntity<>(mensajedeRespuesta, HttpStatus.OK);
-
+    public ResponseEntity<Map<String, Object>> deleteWorker(@PathVariable String username) {
+        String message = workerService.deleteworkerbyUsername(username);
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", true);
+        response.put("message", message);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/all")

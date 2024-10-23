@@ -13,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -40,10 +42,12 @@ public class AuthUser {
     }
 
     @DeleteMapping("/deleteuser/{username}")
-    public ResponseEntity<String>deleteuser(@PathVariable String username){
-        String mensajedeRespuesta= userDetailService.deleteuserbyUsername(username);
-        return new ResponseEntity<>(mensajedeRespuesta, HttpStatus.OK);
-
+    public ResponseEntity<Map<String, Object>> deleteuser(@PathVariable String username) {
+        String mensajedeRespuesta = userDetailService.deleteuserbyUsername(username);
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", true);
+        response.put("message", mensajedeRespuesta);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/all")

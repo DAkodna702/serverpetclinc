@@ -42,9 +42,10 @@ public class SecurityConfig {
                 .csrf().disable()
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(http -> {
-                    // EndPoints publicos
+                    // EndPoints publicos de Users
                     http.requestMatchers(HttpMethod.POST, "/auth/user/log-in").permitAll();
                     http.requestMatchers(HttpMethod.POST, "/auth/user/sign-up").permitAll();
+                    // EndPoints publicos de workers
                     http.requestMatchers(HttpMethod.POST, "/auth2/worker/log-in").permitAll();
                     http.requestMatchers(HttpMethod.POST, "/auth2/worker/sign-up").permitAll();
 
@@ -52,6 +53,36 @@ public class SecurityConfig {
                     http.requestMatchers(HttpMethod.PUT, "/auth/user/updateuser").hasAnyRole("Administrador","Custumer");
                     http.requestMatchers(HttpMethod.DELETE, "/auth/user/deleteuser/**").hasAnyRole("Administrador","Custumer");
                     http.requestMatchers(HttpMethod.GET, "/auth/user/all").hasAnyRole("Administrador");
+
+                    //EndPoints WorkerPrivados
+                    http.requestMatchers(HttpMethod.PUT, "/auth2/worker/updateuser").hasAnyRole("Administrador");
+                    http.requestMatchers(HttpMethod.DELETE, "/auth2/worker/deleteuser/**").hasAnyRole("Administrador");
+                    http.requestMatchers(HttpMethod.GET, "/auth2/worker/all").hasAnyRole("Administrador");
+
+                    //EndPoints MascotPrivados
+                    http.requestMatchers(HttpMethod.GET, "/mascot/user/**").hasAnyRole("Administrador");
+                    http.requestMatchers(HttpMethod.POST, "/mascot/create").hasAnyRole("Administrador");
+                    http.requestMatchers(HttpMethod.PUT, "/mascot/update/**").hasAnyRole("Administrador");
+                    http.requestMatchers(HttpMethod.DELETE, "/mascot/delete/**").hasAnyRole("Administrador");
+                    http.requestMatchers(HttpMethod.GET, "/mascot/listmascot").hasAnyRole("Administrador");
+
+                    //EndPoints HistoriPrivados
+                    http.requestMatchers(HttpMethod.GET, "/hist/mascotP/**").hasAnyRole("Administrador");
+                    http.requestMatchers(HttpMethod.GET, "/hist/mascotT/**").hasAnyRole("Administrador");
+                    http.requestMatchers(HttpMethod.GET, "/hist/workerP/**").hasAnyRole("Administrador");
+                    http.requestMatchers(HttpMethod.GET, "/hist/workerT/**").hasAnyRole("Administrador");
+                    http.requestMatchers(HttpMethod.POST, "/hist/save").hasAnyRole("Administrador");
+                    http.requestMatchers(HttpMethod.GET, "/hist/all").hasAnyRole("Administrador");
+                    http.requestMatchers(HttpMethod.PUT, "/hist/updateC/**").hasAnyRole("Administrador");
+
+                    //Enpoint Factura
+                    http.requestMatchers(HttpMethod.POST, "/facturas/crear").hasAnyRole("Administrador");
+                    http.requestMatchers(HttpMethod.GET, "/facturas/list").hasAnyRole("Administrador");
+                    http.requestMatchers(HttpMethod.GET, "/facturas/pdf/**").hasAnyRole("Administrador");
+                    http.requestMatchers(HttpMethod.GET, "/facturas/reporte/**").hasAnyRole("Administrador");
+                    http.requestMatchers(HttpMethod.PUT, "/facturas/actualizar/**").hasAnyRole("Administrador");
+
+
 
                     http.anyRequest().denyAll();
                 })

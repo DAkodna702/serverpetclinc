@@ -52,10 +52,10 @@ public class WorkerService  implements UserDetailsService{
 
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
 
-        // Añadir los roles
+
         authorityList.add(new SimpleGrantedAuthority("ROLE_" + workerEntity.getRole().name()));
 
-        // Añadir los permisos del rol
+
         workerEntity.getRole().getPermisos().forEach(permission ->
                 authorityList.add(new SimpleGrantedAuthority(permission.name())));
 
@@ -87,10 +87,10 @@ public class WorkerService  implements UserDetailsService{
        WorkerEntity userSaved = workerRepository.save(workerEntity);
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-        // Añadir el rol
+
         authorities.add(new SimpleGrantedAuthority("ROLE_" + userSaved.getRole().name()));
 
-        // Añadir los permisos del rol
+
         userSaved.getRole().getPermisos().forEach(permission ->
                 authorities.add(new SimpleGrantedAuthority(permission.name())));
 
@@ -129,11 +129,11 @@ public class WorkerService  implements UserDetailsService{
     }
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
     public AuthResponse updateUser(AuthCreateUserRequest createRoleRequest) {
-        // Buscar el usuario por su nombre de usuario
+
         WorkerEntity workerEntity = workerRepository.findUserEntityByUsername(createRoleRequest.username())
                 .orElseThrow(() -> new UsernameNotFoundException("El usuario " + createRoleRequest.username() + " no existe."));
 
-        // Actualizar los campos del usuario
+
         if (createRoleRequest.password() != null && !createRoleRequest.password().isEmpty()) {
             workerEntity.setPassword(passwordEncoder.encode(createRoleRequest.password()));
         }
@@ -148,20 +148,20 @@ public class WorkerService  implements UserDetailsService{
             workerEntity.setPhone(createRoleRequest.phone());
         }
 
-        // Guardar el usuario actualizado en la base de datos
+
         WorkerEntity updatedUser = workerRepository.save(workerEntity);
 
-        // Crear lista de roles/permisos
+
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + updatedUser.getRole().name()));
         updatedUser.getRole().getPermisos().forEach(permission ->
                 authorities.add(new SimpleGrantedAuthority(permission.name())));
 
-        // Crear un nuevo token JWT
+
         Authentication authentication = new UsernamePasswordAuthenticationToken(updatedUser, null, authorities);
         String accessToken = jwtUtils.createToken(authentication);
 
-        // Retornar la respuesta de autenticación
+
         return new AuthResponse(updatedUser.getUsername(), "User updated successfully", accessToken, true);
     }
 

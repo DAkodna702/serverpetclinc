@@ -52,10 +52,10 @@ public class UserServiceImpl implements UserDetailsService {
 
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
 
-        // Añadir los roles
+
         authorityList.add(new SimpleGrantedAuthority("ROLE_" + userEntity.getRole().name()));
 
-        // Añadir los permisos del rol
+
         userEntity.getRole().getPermisos().forEach(permission ->
                 authorityList.add(new SimpleGrantedAuthority(permission.name())));
 
@@ -88,10 +88,10 @@ public class UserServiceImpl implements UserDetailsService {
         UserEntity userSaved = userRepository.save(userEntity);
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-        // Añadir el rol
+
         authorities.add(new SimpleGrantedAuthority("ROLE_" + userSaved.getRole().name()));
 
-        // Añadir los permisos del rol
+
         userSaved.getRole().getPermisos().forEach(permission ->
                 authorities.add(new SimpleGrantedAuthority(permission.name())));
 
